@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,user-scalable=no">
+    <title>countMoney</title>
+    <link rel="stylesheet" href="./css/animate.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<!--loading start-->
+<div id="loading_wrap">
+    <div id="loading">0%</div>
+</div>
+<!--loading end-->
+
+<div id="content_wrap">
+
+    <!--start_page start-->
+    <div id="start_page">
+        <img class="challenge animated bounceIn" src="./img/tiaozhan.png" alt="">
+        <img class="gain animated swing" src="./img/yinqu.png" alt="">
+        <img class="start_btn animated pulse " src="./img/start_game.png" alt="">
+        <img class="hand animated fadeOut" src="./img/shou.png" alt="">
+        <div id="options">
+            <img id="img_rank" src="./img/ranking.png" alt="">
+            <img id="img_rule" src="./img/activity_rule.png" alt="">
+            <img id="img_prize" src="./img/prize.png" alt="">
+            <img id="img_use" src="./img/shiyong.png" alt="">
+        </div>
+        <!--user_info-->
+        <div class="p1_mask userData">
+            <img class="close" src="./img/close.png" alt="">
+            <form class="float_block userInfo" action="#">
+                <input class="user info" type="text" placeholder="user">
+                <input class="tel info" type="tel" placeholder="telephone">
+                <input class="sub_btn" type="button" value="">
+            </form>
+        </div>
+    </div>
+
+    <!--底部四个选项-->
+    <div class="p1_mask" id="ranking_wrap">
+        <img class="close" src="./img/close.png" alt="">
+        <div class="float_block" id="ranking_info">
+            <ul class="ranking_list">
+                <li>
+                    <span class="ranking"></span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+                <li>
+                    <span class="ranking"></span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+                <li>
+                    <span class="ranking"></span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+                <li>
+                    <span class="ranking">4</span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+                <li>
+                    <span class="ranking">5</span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+                <li>
+                    <span class="ranking">6</span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+                <li>
+                    <span class="ranking">7</span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+                <li>
+                    <span class="ranking">8</span>
+                    <img src="./img/shizhong.png" alt="">
+                    <span class="player">小李</span>
+                    <span class="score">666</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="p1_mask" id="activity_rule">
+        <img class="close" src="./img/close.png" alt="">
+        <div class="float_block activity">
+            <h2 class="title">活动规则</h2>
+            <p class="rule_text">1、每人有多次游戏机会，但成绩只能提交一次，且提交之后不能更改！</p>
+            <p class="rule_text">2、提交成绩时要提供姓名及手机号码作为兑奖凭证，因用户本人未在规定时间内提供正确的手机号码造成的奖品损失，由用户个人承担。</p>
+            <p class="rule_text">3、活动时间为2016年5月11日-5月19日24:00，活动结束后将在“雾灵山庄”微信公布中奖名单。</p>
+            <p class="rule_text">4、获奖规则：系统将根据大家提交的成绩，按照由多到少的规则进行排行，排名第1的网友将获得一等奖，排名第2-第21位的网友将分获二等奖，以此类推。</p>
+            <p class="rule_text">5、奖品的发放：活动结束后，将由工作人员与您取得联系，并将相应的卡券编号发送到您提供的手机号码上。</p>
+        </div>
+    </div>
+    <div class="p1_mask" id="prize">
+        <img class="close" src="./img/close.png" alt="">
+        <div class="float_block activity">
+            <h2 class="title">活动奖品</h2>
+            <p class="prize_item">一等奖1人：价值1488元7号楼1晚豪华标间免费房券1张，并可享康体项目3折优惠；</p>
+            <p class="prize_item">二等奖20人：100元订房代金券每人1张，并可享康体项目4折优惠；</p>
+            <p class="prize_item">三等奖50人：50元订房代金券每人1张，并可享康体项目5折优惠。</p>
+            <p class="prize_item">奖品的有效期：2016年5月20日至6月15日（周五、周六及法定节假日不可用）。</p>
+        </div>
+    </div>
+    <div class="p1_mask" id="instructions">
+        <img class="close" src="./img/close.png" alt="">
+        <div class="float_block activity">
+            <h2 class="title">奖券使用说明</h2>
+            <p class="rule_text">1、奖品的使用：请务必至少提前一周致电010-81027788或81027799进行预约，并于入住时向前台服务人员出示您手机上收到的卡券编号即可使用（需同时验证获奖人姓名与手机号码）。</p>
+            <p class="rule_text">2、代金券仅适用于线下门市价入住客房消费使用，不适用于通过携程或微信等其他线上渠道预定使用。</p>
+            <p class="rule_text">3、免费房安排的房间将视当时酒店排房情况而定，如您所预约的时段预订已满，将与您协商调整入住时间。</p>
+            <p class="rule_text">4、免费房券及代金券不得用于除订房外其他产品消费，不得与酒店其他优惠折扣或礼券同时使用，且不予退换、兑换现金或找赎。</p>
+            <p class="rule_text">5、对于恶意刷奖者和作弊者，主办方有权取消其兑奖资格。</p>
+        </div>
+    </div>
+    <!--start_page end-->
+
+    <!--game_page start-->
+    <div id="game_page">
+        <div class="p2_text">
+            <img src="./img/p2_txt1.png" alt="">
+        </div>
+        <div class="counter">
+            <span class="count">0</span>
+            <span class="count">0</span>
+            <span class="count">0</span>
+            <span class="timepiece">60</span>
+        </div>
+        <img class="p2_hand animated fadeOutUp" src="./img/p2_shou.png" alt="">
+        <div id="money_wrap">
+            <img class="p2_money" src="./img/p2_qian.jpg" alt="">
+        </div>
+        <img class="p2_wall" src="./img/p2_zhuan.png" alt="">
+    </div>
+    <!--game_page end-->
+
+    <!--game_over_page start-->
+    <div class="end_page">
+
+    </div>
+</div>
+
+
+
+
+    <script src="./js/jquery-2.2.3.min.js"></script>
+    <script src="./js/touch.min.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
