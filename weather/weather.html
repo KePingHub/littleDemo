@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .clearFix:after{
+            content: "";
+            display: table;
+            clear: both;
+        }
+        div{
+            background-color: lightgray;
+            width: 1205px;
+            margin: 0 auto;
+        }
+        div ul{
+            list-style: none;
+        }
+        .item{
+            float: left;
+            background-color: lightgray;
+        }
+        .childList{
+            background-color: #f2faff;
+            border-right: 1px solid #FFF;
+        }
+        .item:last-child .childList{
+            border-right: none;
+        }
+        .childList li{
+            width: 200px;
+            height: 30px;
+            font: 15px/30px SimSun;
+            color: gray;
+            text-align: center;
+        }
+        .childList .temperature span{
+            font-size: 10px;
+            font-weight: bold;
+        }
+        form{
+            padding: 30px 0 20px;
+            text-align: center;
+        }
+        select{
+            width: 130px;
+            height: 30px;
+            margin-left: 15px;
+            border-color: lightgray;
+        }
+
+    </style>
+    <script type="text/javascript" src="city_data.js"></script>
+    <script type="text/javascript" src="myAjax.js"></script>
+</head>
+<body>
+<div>
+    <ul id="weatherList" class="clearFix">
+        <li class="item">
+            <ul class="childList">
+                <li class="date"></li>
+                <li class="type"></li>
+                <li class="temperature">
+                    <span class="low"></span>
+                    <span> ~ </span>
+                    <span class="high"></span>
+                </li>
+                <li class="fx"></li>
+                <li class="fl"></li>
+            </ul>
+        </li>
+        <li class="item">
+            <ul class="childList">
+                <li class="date"></li>
+                <li class="type"></li>
+                <li class="temperature">
+                    <span class="low"></span>
+                    <span>~</span>
+                    <span class="high"></span>
+                </li>
+                <li class="fengxiang"></li>
+                <li class="fengli"></li>
+            </ul>
+        </li>
+        <li class="item">
+            <ul class="childList">
+                <li class="date"></li>
+                <li class="type"></li>
+                <li class="temperature">
+                    <span class="low"></span>
+                    <span>~</span>
+                    <span class="high"></span>
+                </li>
+                <li class="fengxiang"></li>
+                <li class="fengli"></li>
+            </ul>
+        </li>
+        <li class="item">
+            <ul class="childList">
+                <li class="date"></li>
+                <li class="type"></li>
+                <li class="temperature">
+                    <span class="low"></span>
+                    <span>~</span>
+                    <span class="high"></span>
+                </li>
+                <li class="fengxiang"></li>
+                <li class="fengli"></li>
+            </ul>
+        </li>
+        <li class="item">
+            <ul class="childList">
+                <li class="date"></li>
+                <li class="type"></li>
+                <li class="temperature">
+                    <span class="low"></span>
+                    <span>~</span>
+                    <span class="high"></span>
+                </li>
+                <li class="fengxiang"></li>
+                <li class="fengli"></li>
+            </ul>
+        </li>
+        <li class="item">
+            <ul class="childList">
+                <li class="date"></li>
+                <li class="type"></li>
+                <li class="temperature">
+                    <span class="low"></span>
+                    <span>~</span>
+                    <span class="high"></span>
+                </li>
+                <li class="fengxiang"></li>
+                <li class="fengli"></li>
+            </ul>
+        </li>
+    </ul>
+    <form method="get" enctype="application/x-www-form-urlencoded">
+        <select name="provinceList" id="provinceList"></select>
+        <select name="cityList" id="cityList"></select>
+    </form>
+</div>
+<script>
+    //    省市二级联动。2个select第一个选择省，第二个选择市。
+    var selects = document.getElementsByTagName("select");
+    var proList = cityInfo.provinceList;
+    var cityList = cityInfo.cityList;
+    //初始化select
+    (function (){
+        //provinceList添加省名
+        for(var i = 0; i < proList.length; i++){
+            createOption(selects[0],proList[i].ProName);
+        }
+        //cityList添加市名
+        for(var j = 0; j < cityList.length; j++){
+            createOption(selects[1],cityList[j].CityName);
+        }
+    })();
+    //初始化天气
+    getWeather(selects[1].value);
+
+    //动态获取所有信息封装到info对象,并通过遍历该对象的属性的属性值来创建二个select的option
+    //二个下拉列表，无论选哪个先 都可以动态获取所有信息
+    selects[0].onchange = function (){
+        selects[1].innerHTML = "";
+        var info = {};
+        info.cityName = [];
+        var proId = getPro(info,undefined,selects[0].value);
+        var proCityId = getCity(info,proId);
+        for(var proNam of proList){
+            if(proNam == info.ProName){
+                selects[0].value = proNam;
+            }
+        }
+        for(var cityNam of info.cityName){
+            createOption(selects[1],cityNam);
+        }
+        getWeather(selects[1].value);
+    };
+
+    selects[1].onchange = function (){
+        var info = {};
+        info.cityName = [];
+        var proCityId = getCity(info,undefined,selects[1].value);
+        getPro(info,proCityId[0]);
+        selects[0].value = info.ProName;
+        for(var cityNam of info.cityName){
+            createOption(selects[1],cityNam);
+        }
+        getWeather(this.value);
+    };
+
+    //获取省名，并将其存入至info对象的ProName属性中
+    function getPro(info,cityProId,selectValue){
+        var proId;
+        for(var pro of proList){
+            if(pro.ProName == selectValue || cityProId == pro.ProID){
+                info.ProName = pro.ProName;
+                proId = pro.ProID;
+            }
+        }
+        return proId;
+    }
+    //获取市，并将其存入至info对象的cityName中
+    function getCity(info,proId,selectValue){
+        var proCityId = [];
+        for(var city of cityList){
+            if(city.ProID == proId || city.CityName == selectValue){
+                info.cityName.push(city.CityName);
+                proCityId[0] = city.ProID;
+                proCityId[1] = city.CityID;
+            }
+        }
+        return proCityId;
+    }
+
+    //创建option并在指定容器添加
+    function createOption(parentNode,text){
+        var opt = document.createElement("option");
+        var textNode = document.createTextNode(text);
+        opt.appendChild(textNode);
+        parentNode.appendChild(opt);
+    }
+
+    var date = document.getElementsByClassName("date");
+    var type = document.getElementsByClassName("type");
+    var high = document.getElementsByClassName("high");
+    var low = document.getElementsByClassName("low");
+    var fl = document.getElementsByClassName("fengxiang");
+    var fx = document.getElementsByClassName("fengli");
+    var yesFl = document.getElementsByClassName("fl")[0];
+    var yesFx = document.getElementsByClassName("fx")[0];
+    //ajax得到天气数据
+    function getWeather(cityName){
+        ajax.get({
+            url : "http://wthrcdn.etouch.cn/weather_mini?city=" + cityName,
+            onSuccess : function (result){
+                var resul = JSON.parse(result);
+                var dates = getInfo(resul,"date");
+                var highs = getInfo(resul,"high");
+                var lows = getInfo(resul,"low");
+                var fxs = getInfo(resul,"fengxiang");
+                var fls = getInfo(resul,"fengli");
+                var types = getInfo(resul,"type");
+                var yesfx = getInfo(resul,"fx");
+                var yesfl = getInfo(resul,"fl");
+                for(var i = 0; i < date.length; i++){
+                    date[i].innerHTML = dates[i];
+                    high[i].innerHTML = highs[i];
+                    low[i].innerHTML = lows[i];
+                    type[i].innerHTML = types[i];
+                }
+                yesFl.innerHTML = yesfl[0];
+                yesFx.innerHTML = yesfx[0];
+                for(var j = 0; j < fl.length ; j++){
+                    fx[j].innerHTML = fxs[j];
+                    fl[j].innerHTML = fls[j];
+                }
+            },
+            onFail : function (){
+                console.log("请求失败，请重试");
+            }
+        });
+    }
+
+    //从对象中获取指定属性的属性值添加到数组中并返回该数组
+    function getInfo(obj,infoName){
+        var arr = [];
+        for(var item in obj){
+            if(typeof obj[item] == "object"){
+//                console.log(typeof obj[item]);
+                for(var item2 in obj[item]){
+//                    console.log(obj[item][item2]);
+                    if(typeof obj[item][item2] == "object") {
+//                        console.log(obj[item][item2]);
+                        for (var item3 in obj[item][item2]) {
+                            if(Array.isArray(obj[item][item2])){
+                                item3 = parseInt(item3);
+//                                console.log(item3);
+                            }
+                            if(typeof obj[item][item2][item3] == "object") {
+                                for(var item4 in obj[item][item2][item3]){
+                                    if(item4 == infoName){
+                                        arr.push(obj[item][item2][item3][item4]);
+//                                        console.log(item4);
+                                    }
+                                }
+                            }else if(item3 == infoName){
+                                arr.push(obj[item][item2][item3]);
+                            }
+                        }
+                    }else if(item2 == infoName){
+                        arr.push(obj[item][item2]);
+                    }
+                }
+            }else if(item == infoName){
+                arr.push(obj[item]);
+            }
+        }
+        return arr;
+    }
+
+
+</script>
+</body>
+</html>
