@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body, div {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            display: flex;
+            flex-flow: column nowrap;
+        }
+        canvas{
+            margin: auto;
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    <canvas id="canvas" width="600" height="600">
+        您的浏览器不支持，请更新浏览器！！！
+    </canvas>
+</div>
+<script>
+    let canvas = document.querySelector("#canvas");
+
+    draw();
+    function draw() {
+        if(!canvas.getContext) return;
+        let ctx = canvas.getContext("2d");
+        drawHands(ctx);
+    }
+    //绘制表盘
+    function drawClockface(ctx) {
+        let pi = Math.PI;
+        ctx.save();
+        ctx.beginPath();
+        ctx.translate(300,300);
+        ctx.arc(0,0,300,-pi/2, 3*pi/2);
+        ctx.stroke();
+        ctx.closePath();
+        for (let i = 0; i < 60; i++){
+            ctx.save();
+            ctx.rotate(i * pi / 30);
+            ctx.beginPath();
+            if(i % 5 === 0){
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 5;
+                ctx.lineCap = "round";
+                ctx.moveTo(0,-290);
+                ctx.lineTo(0,-240);
+                ctx.stroke();
+                ctx.closePath();
+                ctx.restore();
+                continue;
+            }
+            ctx.moveTo(0,-290);
+            ctx.lineTo(0,-250);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        }
+        ctx.restore();
+    }
+    
+    //绘制指定样式的表针
+    function drawHand(color,deg,width,length,ctx) {
+        let pi = Math.PI;
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.translate(300,300);
+        ctx.rotate(-pi/2 + deg);
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(10,0);
+        ctx.lineTo(-length,0);
+        ctx.lineTo(-length + 5, 5);
+        ctx.moveTo(-length,0);
+        ctx.lineTo(-length + 5, -5);
+//        ctx.lineJoin = "round";
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+    }
+
+    //在表盘上绘制表针
+    function drawHands(ctx) {
+        let pi = Math.PI,
+            secondDeg,
+            minuteDeg,
+            hourDeg,
+            time;
+        requestAnimationFrame(function step() {
+            ctx.clearRect(0,0,600,600);
+            drawClockface(ctx);
+            time = new Date();
+            secondDeg = pi / 30 * time.getSeconds();
+            minuteDeg = pi / 30 * time.getMinutes() + secondDeg / 60;
+            hourDeg = pi / 6 * time.getHours() + minuteDeg / 12;
+            drawHand("red",hourDeg,5,100,ctx);
+            drawHand("yellow",minuteDeg,5,150,ctx);
+            drawHand("green",secondDeg,5,190,ctx);
+            requestAnimationFrame(step);
+        });
+    }
+</script>
+</body>
+</html>
