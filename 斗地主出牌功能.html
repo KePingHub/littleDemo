@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script>
+    //    写一个三个人玩斗地主的游戏。实现随机发牌的功能。
+    //    使用面向对象的思路完成。 最后把每个玩家的牌在页面展示出来，只展示花色♣️♠️♥️♦️和点数即可。
+    //    提示：
+    //    a：游戏本身是个对象，比如有游戏名字、玩家、一副扑克等属性， 应该有开始游戏的功能。
+    //    b:每一副扑克本身也应该是个对象，有牌的数量的属性， 和存储每一张扑克的数组，洗牌等功能。
+    //    c:每张牌也应该是个对象，有花色和点数等属性。
+    //    d:每个玩家也应该是个对象，比如玩家的姓名，玩家手里的牌等属性。
+
+    //每张Card对象构造函数
+    function Card(arg) {
+        this._init(arg);
+    }
+    Card.prototype = {
+        constructor: Card,
+        _init: function (arg) {
+            this.cardDesign = arg.cardDesign;
+            this.cardValue = arg.cardValue;
+        }
+    };
+
+    //玩家构造函数
+    function Player(arg) {
+        this._init(arg);
+    }
+    Player.prototype = {
+        constructor: Player,
+        _init: function (arg) {
+            this.name = arg.name;
+            this.ownCards = arg.ownCards;
+        },
+        playCard : function () {
+        }
+    };
+
+    //斗地主游戏对象
+    var landlordsGame = {
+        gameName: "斗地主",
+        playerNum : 3,
+        players : [
+            new Player({name : "小李" , ownCards : []}),
+            new Player({name : "小明" , ownCards : []}),
+            new Player({name : "小刚" , ownCards : []})
+        ],
+        poker : {
+            cardsNum: 54,
+            allCards : (function (){
+                var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
+                var designs = ["♣", "♠", "♥", "♦"];
+                var cards = [];
+                for (var v of values){
+                    for (var d of designs){
+                        cards[cards.length] = new Card({cardValue: v, cardDesign: d});
+                    }
+                }
+                cards[cards.length] = new Card({cardValue: "大王", cardDesign: "（红色）"});
+                cards[cards.length] = new Card({cardValue: "小王", cardDesign: "（黑色）"});
+                return cards;
+            })(),
+            //洗牌
+            shuffle: function () {
+            /*    var count = this._createRandomInt(54, 100);
+                var index1, index2, temp;
+                for (var i = 0; i < count; i++) {
+                    index1 = this._createRandomInt(0, 53);
+                    index2 = this._createRandomInt(0, 53);
+                    temp = this.allCards[index1];
+                    this.allCards[index1] = this.allCards[index2];
+                    this.allCards[index2] = temp;
+                }
+            */
+                this.allCards.sort(function (a,b){
+                    return Math.random() > 0.5 ? 1 : -1;
+                });
+            },
+            //发牌
+            deal : function (){
+                for(var i = 0; i < this.cardsNum - 3; i++){
+                    if(i < 17){
+                        landlordsGame.players[0].ownCards.push(this.allCards[i]);
+                    }else if(i < 34){
+                        landlordsGame.players[1].ownCards.push(this.allCards[i]);
+                    }else if(i < 51){
+                        landlordsGame.players[2].ownCards.push(this.allCards[i]);
+                    }
+                }
+            },
+            //创建[start,end]范围的随机整数并返回
+            _createRandomInt: function (start, end) {
+                return parseInt(Math.random() * (end - start + 1) + start);
+            }
+        },
+        //开始游戏
+        startGame: function () {
+            //洗牌
+            this.poker.shuffle();
+            //发牌
+            this.poker.deal();
+        },
+        //获取所有玩家的信息，存入对象，该对象属性名分别为玩家name   属性值为 自己的扑克 并返回该对象
+        showPlayerCards : function (){
+            var playersInfo = {},pc1;
+            for(var p of this.players){
+                pc = [];
+                for(var c of p.ownCards){
+                    pc.push(c.cardValue + c.cardDesign);
+                }
+                playersInfo[p.name] = pc;
+            }
+            return playersInfo;
+        }
+    };
+
+    //开始游戏
+    landlordsGame.startGame();
+    //获取所有玩家的扑克信息
+    var playersInfo = landlordsGame.showPlayerCards();
+    //页面打印玩家的扑克信息
+    for(var playerName in playersInfo){
+        document.write(playerName + ":&nbsp;&nbsp;&nbsp;");
+        for(var card of playersInfo[playerName]){
+            document.write(card + "&nbsp;&nbsp;&nbsp;&nbsp;" );
+        }
+        document.write("<br/>");
+    }
+
+</script>
+</body>
+</html>
